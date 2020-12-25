@@ -1,0 +1,25 @@
+﻿<Window x:Class="ScrollWheelReverseForWin10.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ScrollWheelReverseForWin10"
+        mc:Ignorable="d"
+        Title="Scroll Wheel Reverse" Height="434.492" Width="701.881" ResizeMode="CanResizeWithGrip">
+    <Grid Margin="0,0,0,11.667">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="145*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <RadioButton x:Name="optionScrollUpUp" Content="Up (windows style)" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Checked="optionScrollUpUp_Checked"/>
+        <RadioButton x:Name="optionScrollUpDown" Content="Down (macos style)" HorizontalAlignment="Left" Margin="10,63,0,0" VerticalAlignment="Top" Checked="optionScrollUpDown_Checked"/>
+        <ListBox x:Name="deviceList" Margin="206,10,14.6,165.733" SelectionChanged="deviceList_SelectionChanged"/>
+        <Button x:Name="btnApply" Content="Apply Now" HorizontalAlignment="Left" VerticalAlignment="Top" Width="184" Height="35" Margin="10,103,0,0" Click="btnApply_Click"/>
+        <Button x:Name="btnGenerateRegistryPatchFile" Content="Generate .reg File" HorizontalAlignment="Left" VerticalAlignment="Top" Width="184" Height="35" Margin="10,183,0,0" IsEnabled="False"/>
+        <Button x:Name="btnExit" Content="Exit" HorizontalAlignment="Left" Width="184" Margin="10,0,0,10.333" Height="35" VerticalAlignment="Bottom"/>
+        <Label Content="Scrolling Up Scrolls Content:" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top" Height="29" Width="184"/>
+        <Button x:Name="btnApplyAndRestart" Content="Apply Now and Restart" HorizontalAlignment="Left" VerticalAlignment="Top" Width="184" Height="35" Margin="10,143,0,0" Click="btnApplyAndRestart_Click"/>
+        <TextBlock Margin="206,0,14.6,10.733" TextWrapping="Wrap" Text="TextBlock" Height="142" VerticalAlignment="Bottom"/>
+
+    </Grid>
+</Window>
