@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
@@ -14,18 +15,16 @@ namespace ScrollWheelReverseForWin10
     /// </summary>
     public partial class MainWindow : Window
     {
-        Mouse selectedMouse;
+        Mouse _selectedMouse;
 
         public MainWindow()
         {
             InitializeComponent();
 
             Dictionary<string, Mouse> deviceDriverInfo = GetMice();
-            foreach (Mouse mouse in deviceDriverInfo.Values)
-            {
-                deviceList.Items.Add(mouse);
-            }
-
+            var sortedDeviceDriverInfo = deviceDriverInfo.OrderBy(d => d.Value.Name.StartsWith("HID")).Select(d => d.Value).ToList();
+            foreach (var item in sortedDeviceDriverInfo)
+                deviceList.Items.Add(item);
             UpdateOptions();
         }
 
@@ -49,12 +48,12 @@ namespace ScrollWheelReverseForWin10
 
         private void Apply()
         {
-            if (selectedMouse == null)
+            if (_selectedMouse == null)
                 return;
 
-            if (selectedMouse.FlipFlopWheel != selectedMouse.FlipFlopWheelOriginal)
+            if (_selectedMouse.FlipFlopWheel != _selectedMouse.FlipFlopWheelOriginal)
             {
-                selectedMouse.SetDeviceParameter(Mouse.FLIP_FLOP_WHEEL, selectedMouse.FlipFlopWheel);
+                _selectedMouse.SetDeviceParameter(Mouse.FLIP_FLOP_WHEEL, _selectedMouse.FlipFlopWheel);
             }
         }
 
@@ -67,51 +66,47 @@ namespace ScrollWheelReverseForWin10
 
         void UpdateOptions()
         {
-            optionScrollUpUp.IsEnabled = (selectedMouse != null);
-            optionScrollUpDown.IsEnabled = (selectedMouse != null);
+            optionScrollUpUp.IsEnabled = (_selectedMouse != null);
+            optionScrollUpDown.IsEnabled = (_selectedMouse != null);
 
-            btnApply.IsEnabled = (selectedMouse != null && selectedMouse.FlipFlopWheel != selectedMouse.FlipFlopWheelOriginal);
-            btnApplyAndRestart.IsEnabled = (selectedMouse != null && selectedMouse.FlipFlopWheel != selectedMouse.FlipFlopWheelOriginal);
+            btnApply.IsEnabled = (_selectedMouse != null && _selectedMouse.FlipFlopWheel != _selectedMouse.FlipFlopWheelOriginal);
+            btnApplyAndRestart.IsEnabled = (_selectedMouse != null && _selectedMouse.FlipFlopWheel != _selectedMouse.FlipFlopWheelOriginal);
 
-            if (selectedMouse != null)
+            if (_selectedMouse != null)
             {
-                optionScrollUpUp.IsChecked = (selectedMouse.FlipFlopWheel == 0);
-                optionScrollUpDown.IsChecked = (selectedMouse.FlipFlopWheel == 1);
+                optionScrollUpUp.IsChecked = (_selectedMouse.FlipFlopWheel == 0);
+                optionScrollUpDown.IsChecked = (_selectedMouse.FlipFlopWheel == 1);
             }
 
         }
 
         private void deviceList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            selectedMouse = e.AddedItems.Count > 0 ? (Mouse)e.AddedItems[0] : null;
+            _selectedMouse = e.AddedItems.Count > 0 ? (Mouse)e.AddedItems[0] : null;
             UpdateOptions();
         }
 
         private void optionScrollUpUp_Checked(object sender, RoutedEventArgs e)
         {
-            if (selectedMouse != null)
-            {
-                selectedMouse.FlipFlopWheel = 0;
-                UpdateOptions();
-            }
+            if (_selectedMouse != null)
+                _selectedMouse.FlipFlopWheel = 0;
+            UpdateOptions();
         }
 
         private void optionScrollUpDown_Checked(object sender, RoutedEventArgs e)
         {
-            if (selectedMouse != null)
-            {
-                selectedMouse.FlipFlopWheel = 1;
-                UpdateOptions();
-            }
+            if (_selectedMouse != null)
+                _selectedMouse.FlipFlopWheel = 1;
+            UpdateOptions();
         }
 
-        private void btnApply_Click(object sender, RoutedEventArgs e)
+        private void Apply_Click(object sender, RoutedEventArgs e)
         {
             Apply();
             UpdateOptions();
         }
 
-        void btnApplyAndRestart_Click(object sender, RoutedEventArgs e)
+        void ApplyAndRestart_Click(object sender, RoutedEventArgs e)
         {
             Apply();
             UpdateOptions();
