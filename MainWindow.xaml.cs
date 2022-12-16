@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management;
 using System.Management.Automation;
 using System.Windows;
@@ -8,45 +9,6 @@ using System.Windows.Input;
 
 namespace ScrollWheelReverseForWin10
 {
-    public class Mouse
-    {
-        public const string FLIP_FLOP_WHEEL = "FlipFlopWheel";
-
-        ManagementObject managementObject;
-
-        public Mouse(ManagementObject managementObject)
-        {
-            this.managementObject = managementObject;
-            this.FlipFlopWheel = FlipFlopWheelOriginal;
-        }
-
-        public string Description => this.managementObject["Description"].ToString();
-        public string Name => this.managementObject["Name"].ToString();
-        public string Manufacturer => this.managementObject["Manufacturer"].ToString();
-        public string DeviceID => this.managementObject["DeviceID"].ToString();
-        public string PNPDeviceID => this.managementObject["PNPDeviceID"].ToString();
-        public string Status => this.managementObject["Status"].ToString();
-        
-        public string RegistryKey => "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Enum\\" + DeviceID + "\\Device Parameters";
-
-        public int FlipFlopWheel { set; get; }
-        public int FlipFlopWheelOriginal => GetDeviceParameter(FLIP_FLOP_WHEEL);
-
-        public int GetDeviceParameter(string name)
-        {
-            return (int)Microsoft.Win32.Registry.GetValue(RegistryKey, name, 0);
-        }
-
-        public void SetDeviceParameter(string name, object value)
-        {
-            Microsoft.Win32.Registry.SetValue(RegistryKey, name, value);
-        }
-
-        public override string ToString()
-        {
-            return string.Format("{0} ({1})", Name, DeviceID);
-        }
-    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -64,7 +26,7 @@ namespace ScrollWheelReverseForWin10
                 deviceList.Items.Add(mouse);
             }
 
-            _update_options();
+            UpdateOptions();
         }
 
         Dictionary<string, Mouse> GetMice()
@@ -76,7 +38,7 @@ namespace ScrollWheelReverseForWin10
             );
             ManagementObjectCollection objCollection = objSearcher.Get();
 
-            foreach (ManagementObject obj in objCollection)
+            foreach (ManagementObject obj in objCollection.Cast<ManagementObject>())
             {
                 var mouse = new Mouse(obj);
                 drivers.Add(mouse.DeviceID, mouse);
@@ -85,7 +47,7 @@ namespace ScrollWheelReverseForWin10
             return drivers;
         }
 
-        private void _apply()
+        private void Apply()
         {
             if (selectedMouse == null)
                 return;
@@ -96,14 +58,14 @@ namespace ScrollWheelReverseForWin10
             }
         }
 
-        private void _restart()
+        private void RestartMachine()
         {
             var ps = PowerShell.Create();
             ps.AddCommand("Restart-Computer");
             ps.Invoke();
         }
 
-        void _update_options()
+        void UpdateOptions()
         {
             optionScrollUpUp.IsEnabled = (selectedMouse != null);
             optionScrollUpDown.IsEnabled = (selectedMouse != null);
@@ -122,7 +84,7 @@ namespace ScrollWheelReverseForWin10
         private void deviceList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             selectedMouse = e.AddedItems.Count > 0 ? (Mouse)e.AddedItems[0] : null;
-            _update_options();
+            UpdateOptions();
         }
 
         private void optionScrollUpUp_Checked(object sender, RoutedEventArgs e)
@@ -130,7 +92,7 @@ namespace ScrollWheelReverseForWin10
             if (selectedMouse != null)
             {
                 selectedMouse.FlipFlopWheel = 0;
-                _update_options();
+                UpdateOptions();
             }
         }
 
@@ -139,21 +101,21 @@ namespace ScrollWheelReverseForWin10
             if (selectedMouse != null)
             {
                 selectedMouse.FlipFlopWheel = 1;
-                _update_options();
+                UpdateOptions();
             }
         }
 
         private void btnApply_Click(object sender, RoutedEventArgs e)
         {
-            _apply();
-            _update_options();
+            Apply();
+            UpdateOptions();
         }
 
         void btnApplyAndRestart_Click(object sender, RoutedEventArgs e)
         {
-            _apply();
-            _update_options();
-            _restart();
+            Apply();
+            UpdateOptions();
+            RestartMachine();
         }
     }
 }
