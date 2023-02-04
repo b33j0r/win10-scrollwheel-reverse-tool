@@ -6,7 +6,6 @@ using System.Management;
 using System.Management.Automation;
 using System.Windows;
 using System.Windows.Input;
-//using System.Management.Automation;
 
 namespace ScrollWheelReverseForWin10
 {
@@ -111,6 +110,11 @@ namespace ScrollWheelReverseForWin10
             Apply();
             UpdateOptions();
             RestartMachine();
+        }
+
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
