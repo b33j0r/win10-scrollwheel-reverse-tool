@@ -83,10 +83,11 @@ namespace ScrollWheelReverseForWin10
 
         void UpdateOptions()
         {
-            optionScrollUpUp.IsEnabled = true;
-            optionScrollUpDown.IsEnabled = true;
             if (_selectedMouse != null)
             {
+                optionScrollUpUp.IsEnabled = true;
+                optionScrollUpDown.IsEnabled = true;
+
                 optionScrollUpUp.IsChecked = (_selectedMouse.FlipFlopWheel == 0);
                 optionScrollUpUp.FontWeight = (_selectedMouse.FlipFlopWheelOriginal == 0)
                     ? FontWeights.Bold : FontWeights.Normal;
@@ -94,6 +95,11 @@ namespace ScrollWheelReverseForWin10
                 optionScrollUpDown.IsChecked = (_selectedMouse.FlipFlopWheel == 1);
                 optionScrollUpDown.FontWeight = (_selectedMouse.FlipFlopWheelOriginal == 1)
                     ? FontWeights.Bold : FontWeights.Normal;
+            }
+            else
+            {
+                optionScrollUpUp.IsEnabled = false;
+                optionScrollUpDown.IsEnabled = false;
             }
 
             btnApply.FontWeight = IsModified ? FontWeights.Bold : FontWeights.Normal;
@@ -110,10 +116,6 @@ namespace ScrollWheelReverseForWin10
         {
             if (_selectedMouse != null)
                 _selectedMouse.FlipFlopWheel = 0;
-            else foreach (Mouse mouse in deviceList.Items)
-                {
-                    mouse.FlipFlopWheel = 0;
-                }
             UpdateOptions();
         }
 
@@ -121,10 +123,6 @@ namespace ScrollWheelReverseForWin10
         {
             if (_selectedMouse != null)
                 _selectedMouse.FlipFlopWheel = 1;
-            else foreach (Mouse mouse in deviceList.Items)
-                {
-                    mouse.FlipFlopWheel = 1;
-                }
             UpdateOptions();
         }
 
@@ -144,6 +142,24 @@ namespace ScrollWheelReverseForWin10
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void btnAllUp_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Mouse mouse in deviceList.Items)
+            {
+                mouse.FlipFlopWheel = 0;
+            }
+            UpdateOptions();
+        }
+
+        private void btnAllDown_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Mouse mouse in deviceList.Items)
+            {
+                mouse.FlipFlopWheel = 1;
+            }
+            UpdateOptions();
         }
     }
 }

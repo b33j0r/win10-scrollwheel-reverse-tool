@@ -12,14 +12,16 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <RadioButton x:Name="optionScrollUpUp" Content="Up (windows style)" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Checked="optionScrollUpUp_Checked"/>
-        <RadioButton x:Name="optionScrollUpDown" Content="Down (macos style)" HorizontalAlignment="Left" Margin="10,63,0,0" VerticalAlignment="Top" Checked="optionScrollUpDown_Checked"/>
+        <RadioButton x:Name="optionScrollUpDown" Content="Down (macos style)" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Checked="optionScrollUpDown_Checked"/>
         <ListBox x:Name="deviceList" Margin="206,10,14,68" SelectionChanged="deviceList_SelectionChanged"/>
-        <Button x:Name="btnApply" Content="Apply Now" HorizontalAlignment="Left" VerticalAlignment="Top" Width="184" Height="35" Margin="10,103,0,0" Click="Apply_Click"/>
-        <Button x:Name="btnGenerateRegistryPatchFile" Content="Generate .reg File" HorizontalAlignment="Left" VerticalAlignment="Top" Width="184" Height="35" Margin="10,183,0,0" IsEnabled="False"/>
+        <Button x:Name="btnApply" Content="Apply Now" HorizontalAlignment="Left" VerticalAlignment="Top" Width="184" Height="35" Margin="10,123,0,0" Click="Apply_Click"/>
+        <Button x:Name="btnGenerateRegistryPatchFile" Content="Generate .reg File" HorizontalAlignment="Left" VerticalAlignment="Top" Width="184" Height="35" Margin="10,203,0,0" IsEnabled="False"/>
         <Button x:Name="btnExit" Content="Exit" HorizontalAlignment="Left" Width="184" Margin="10,0,0,10.333" Height="35" VerticalAlignment="Bottom" Click="btnExit_Click"/>
         <Label Content="Scrolling Up Scrolls Content:" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top" Height="29" Width="184"/>
-        <Button x:Name="btnApplyAndRestart" Content="Apply Now and Restart" HorizontalAlignment="Left" VerticalAlignment="Top" Width="184" Height="35" Margin="10,143,0,0" Click="ApplyAndRestart_Click"/>
+        <Button x:Name="btnApplyAndRestart" Content="Apply Now and Restart" HorizontalAlignment="Left" VerticalAlignment="Top" Width="184" Height="35" Margin="10,163,0,0" Click="ApplyAndRestart_Click"/>
         <TextBlock Margin="206,0,14,10" TextWrapping="Wrap" Height="35" VerticalAlignment="Bottom"/>
+        <Button x:Name="btnAllUp" Content="All" HorizontalAlignment="Left" Margin="154,40,0,0" VerticalAlignment="Top" Width="40" Click="btnAllUp_Click"/>
+        <Button x:Name="btnAllDown" Content="All" HorizontalAlignment="Left" Margin="154,74,0,0" VerticalAlignment="Top" Width="40" Click="btnAllDown_Click"/>
 
     </Grid>
 </Window>
