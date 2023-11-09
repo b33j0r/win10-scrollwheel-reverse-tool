@@ -45,14 +45,32 @@ namespace ScrollWheelReverseForWin10
             return drivers;
         }
 
+        public bool IsModified
+        {
+            get
+            {
+                foreach (Mouse mouse in deviceList.Items)
+                {
+                    if (mouse.FlipFlopWheel != mouse.FlipFlopWheelOriginal)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
         private void Apply()
         {
-            if (_selectedMouse == null)
+            if (!IsModified)
                 return;
 
-            if (_selectedMouse.FlipFlopWheel != _selectedMouse.FlipFlopWheelOriginal)
+            foreach (Mouse mouse in deviceList.Items)
             {
-                _selectedMouse.SetDeviceParameter(Mouse.FLIP_FLOP_WHEEL, _selectedMouse.FlipFlopWheel);
+                if (mouse.FlipFlopWheel != mouse.FlipFlopWheelOriginal)
+                {
+                    mouse.SetDeviceParameter(Mouse.FLIP_FLOP_WHEEL, mouse.FlipFlopWheel);
+                }
             }
         }
 
@@ -65,18 +83,21 @@ namespace ScrollWheelReverseForWin10
 
         void UpdateOptions()
         {
-            optionScrollUpUp.IsEnabled = (_selectedMouse != null);
-            optionScrollUpDown.IsEnabled = (_selectedMouse != null);
-
-            btnApply.IsEnabled = (_selectedMouse != null && _selectedMouse.FlipFlopWheel != _selectedMouse.FlipFlopWheelOriginal);
-            btnApplyAndRestart.IsEnabled = (_selectedMouse != null && _selectedMouse.FlipFlopWheel != _selectedMouse.FlipFlopWheelOriginal);
-
+            optionScrollUpUp.IsEnabled = true;
+            optionScrollUpDown.IsEnabled = true;
             if (_selectedMouse != null)
             {
                 optionScrollUpUp.IsChecked = (_selectedMouse.FlipFlopWheel == 0);
+                optionScrollUpUp.FontWeight = (_selectedMouse.FlipFlopWheelOriginal == 0)
+                    ? FontWeights.Bold : FontWeights.Normal;
+
                 optionScrollUpDown.IsChecked = (_selectedMouse.FlipFlopWheel == 1);
+                optionScrollUpDown.FontWeight = (_selectedMouse.FlipFlopWheelOriginal == 1)
+                    ? FontWeights.Bold : FontWeights.Normal;
             }
 
+            btnApply.FontWeight = IsModified ? FontWeights.Bold : FontWeights.Normal;
+            btnApplyAndRestart.FontWeight = IsModified ? FontWeights.Bold : FontWeights.Normal;
         }
 
         private void deviceList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -89,6 +110,10 @@ namespace ScrollWheelReverseForWin10
         {
             if (_selectedMouse != null)
                 _selectedMouse.FlipFlopWheel = 0;
+            else foreach (Mouse mouse in deviceList.Items)
+                {
+                    mouse.FlipFlopWheel = 0;
+                }
             UpdateOptions();
         }
 
@@ -96,6 +121,10 @@ namespace ScrollWheelReverseForWin10
         {
             if (_selectedMouse != null)
                 _selectedMouse.FlipFlopWheel = 1;
+            else foreach (Mouse mouse in deviceList.Items)
+                {
+                    mouse.FlipFlopWheel = 1;
+                }
             UpdateOptions();
         }
 
